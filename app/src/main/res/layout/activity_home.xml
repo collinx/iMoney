@@ -6,6 +6,92 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.fintechcodex.imoney.HomeActivity">
+<LinearLayout
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <com.hookedonplay.decoviewlib.DecoView
+            xmlns:custom="http://schemas.android.com/apk/res-auto"
+            custom:dv_lineWidth="26dp"
+            android:layout_margin="16dp"
+            android:id="@+id/dynamicArcView"
+            android:layout_width="match_parent"
+            android:layout_height="200dp" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginTop="24dp"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/credit"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_margin="10dp"
+            android:textAlignment="center"
+            android:gravity="center"
+            android:background="#FFFF8800"/>
+        <TextView
+            android:id="@+id/debit"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_margin="10dp"
+            android:textAlignment="center"
+            android:gravity="center"
+            android:background="#FFFF4444"/>
+        <TextView
+            android:id="@+id/due"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:textAlignment="center"
+            android:gravity="center"
+            android:layout_margin="10dp"
+            android:background="#FF6699FF"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginTop="-50dp"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/creditTotal"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_margin="10dp"
+            android:textAlignment="center"
+            android:textSize="28sp"
+            android:text="Credit"
+            />
+        <TextView
+            android:id="@+id/DebitTotal"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_margin="10dp"
+            android:textAlignment="center"
+            android:textSize="28sp"
+            android:text="Debit"
+            />
+        <TextView
+            android:id="@+id/DueTotal"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_margin="10dp"
+            android:textAlignment="center"
+            android:textSize="28sp"
+            android:text="Due"/>
+
+    </LinearLayout>
+
+</LinearLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_new"

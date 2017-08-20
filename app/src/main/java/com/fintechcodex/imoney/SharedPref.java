@@ -3,8 +3,6 @@ package com.fintechcodex.imoney;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import java.util.Date;
-
 public class SharedPref {
 
     // Shared Preferences
@@ -48,15 +46,15 @@ public class SharedPref {
         return pref.getString(USER_UID,null);
     }
     public Long getSyncStatuc(){
-        return pref.getLong(DATA_SYNC,new Date().getTime());
+        return pref.getLong(DATA_SYNC,1);
     }
 
     public void setUserUid(String userUid){
         editor.putString(USER_UID,userUid);
         editor.commit();
     }
-    public void setSyncStatuc(int time){
-        editor.putInt(DATA_SYNC,time);
+    public void setSyncStatuc(long time){
+        editor.putLong(DATA_SYNC,time);
         editor.commit();
     }
     public void logOut(){

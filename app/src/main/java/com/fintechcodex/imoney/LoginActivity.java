@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.fintechcodex.imoney.chat.AIApplication;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -27,11 +28,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
+import static android.Manifest.permission.INTERNET;
+
 public class LoginActivity extends AppCompatActivity  implements
         GoogleApiClient.OnConnectionFailedListener,
         View.OnClickListener{
-
-
+    private AIApplication app;
     private static final String TAG = "GoogleActivity";
     private static final int RC_SIGN_IN = 9001;
 
@@ -69,7 +71,9 @@ public class LoginActivity extends AppCompatActivity  implements
                     Manifest.permission.ACCESS_NETWORK_STATE)
                     != PackageManager.PERMISSION_GRANTED  || ContextCompat.checkSelfPermission(this,
                     Manifest.permission.READ_PHONE_STATE)
-                    != PackageManager.PERMISSION_GRANTED  ) {
+                    != PackageManager.PERMISSION_GRANTED  || ContextCompat.checkSelfPermission(this,
+                    INTERNET)
+                    != PackageManager.PERMISSION_GRANTED) {
 
 
 
@@ -81,7 +85,8 @@ public class LoginActivity extends AppCompatActivity  implements
                                 Manifest.permission.RECORD_AUDIO,
                                 Manifest.permission.GET_ACCOUNTS,
                                 Manifest.permission.READ_PHONE_STATE,
-                                Manifest.permission.ACCESS_NETWORK_STATE
+                                Manifest.permission.ACCESS_NETWORK_STATE,
+                                Manifest.permission.INTERNET
 
 
 
@@ -129,8 +134,7 @@ public class LoginActivity extends AppCompatActivity  implements
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = result.getSignInAccount();
                 firebaseAuthWithGoogle(account);
-                SharedPref pref = new SharedPref(getApplicationContext());
-                pref.setUserUid(mAuth.getCurrentUser().getUid());
+
                 startActivity(new Intent(LoginActivity.this,HomeActivity.class ));
                 finish();
             } else {
@@ -161,7 +165,8 @@ public class LoginActivity extends AppCompatActivity  implements
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-
+                            SharedPref pref = new SharedPref(getApplicationContext());
+                            pref.setUserUid(user.getUid());
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
@@ -202,6 +207,8 @@ public class LoginActivity extends AppCompatActivity  implements
         int i = v.getId();
         if (i == R.id.google_button) {
             signIn();
+
         }
     }
+
 }
