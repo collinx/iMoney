@@ -121,7 +121,7 @@ public class Message implements Comparable<Message>{
         ContentResolver cr = context.getContentResolver();
         Cursor c = null;
         SharedPref pref = new SharedPref(context);
-
+        LocalDatabase database = new LocalDatabase(context);
 
         try {
             c = cr.query(uri, new String[]{"_id", "body", "address", "date_sent", "date", "case when date_sent IS NOT 0 then date_sent else date END as dateSent"}, "dateSent >= 0", null, "dateSent ASC");
@@ -144,42 +144,46 @@ public class Message implements Comparable<Message>{
             while (!c.isAfterLast()) {
                 String body = c.getString(c.getColumnIndexOrThrow("body")).toLowerCase();
                 String number = c.getString(c.getColumnIndexOrThrow("address"));
-
+                long time = c.getLong(c.getColumnIndexOrThrow("date_sent"));
                 int smsId =   c.getInt(c.getColumnIndexOrThrow("_id"));
 
                 if(!Pattern.matches("[\\D]*\\d{5,}",number)  && !body.contains("otp") && !body.contains("get") && !body.contains("enjoy")   && !body.contains("sale") && !body.contains("expire") && !body.contains("free") && !body.contains("one time password") && !body.contains("offer") && !body.contains("off")  && !body.contains("flat")  ){
 
 
-                    if( body.contains("due") && Pattern.matches("\\d{1,}",body)  ){
-                        Log.v("TAG", "due " + number+ body + " SMSs");
-                        messagesDue.add(new Message(smsId,body,number,null));
-                    }
-                        else if(body.contains("code")  )  {
 
-                    }
-                    else {
-                        if((body.contains("rs") || body.contains("inr"))&& Pattern.matches("\\d{1,}",body)){
+                        if(body.contains("rs") || body.contains("inr")) {
 
-                            Log.v("TAG", "Rec " + number+ body + " SMSs");
-                            messagesReceived.add(new Message(smsId,body,number,null));
+                            String[] sp = body.split(" ");
+                            float amount = 0;
+                            for (int i = 0; i < sp.length; i++) {
+                                if (sp[i].trim().equals("rs") || sp[i].trim().equals("inr")) {
+                                    try {
+                                        if (Float.parseFloat(sp[i + 1]) > 0)
+                                            amount = (Float.parseFloat(sp[i + 1]));
+                                    } catch (Exception e) {
 
-                        }else{
-                            Log.v("TAG", "sen " + number+ body + " SMSs");
-                            messagesSent.add(new Message(smsId,body,number,null)) ;
+                                    }
+
+                                }
+                            }
+
+                            if (body.contains("paid") || body.contains("debited") || body.contains("order") || body.contains("transaction")) {
+                                messagesSent.add(new Message(smsId, body, number, null, amount));
+                            }else if( body.contains("due") && Pattern.matches("\\d{1,}",body)  ){
+                                Log.v("TAG", "due " + number+ body + " SMSs");
+                                messagesDue.add(new Message(smsId,body,number,null, amount));
+                            } else {
+                                messagesReceived.add(new Message(smsId, body, number, null, amount));
+                            }
+
+
+
                         }
-                    }
 
 
-//                    if(body.contains("Received")   ||  body.contains("Receive")   ||body.contains("Credit")  || body.contains("Credited")  ){
-//
-//
-//                    }
-//
-//                    else{
-//
-//                    }
 
                 }
+
                 c.moveToNext();
             }
 
@@ -187,6 +191,17 @@ public class Message implements Comparable<Message>{
             Collections.sort(messagesReceived);
             Log.v("TAG", "Parsing " + messagesSent.size() +" "+ messagesReceived.size() + " SMSs");
             pref.setSyncStatuc(new Date().getTime());
+            for(Message msg : messagesDue){
+                database.saveDue(msg);
+            }
+            for(Message msg : messagesReceived){
+                database.saveCredit(msg);
+            }
+            for(Message msg : messagesSent){
+                database.saveDebit(msg);
+            }
+
+
             c.close();
         }
     }

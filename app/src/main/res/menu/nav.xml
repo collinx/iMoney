@@ -3,6 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/action_sync"
+        android:orderInCategory="100"
+        android:title="ReSync"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/action_sign_out"
         android:orderInCategory="100"
         android:title="Sign Out"
