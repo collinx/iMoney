@@ -32,12 +32,11 @@
             android:name=".HomeActivity"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".chat.chatC"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".details"></activity>
+        <activity android:name=".details" />
+        <activity android:name=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar"  ></activity>
     </application>
 
 </manifest>

@@ -32,7 +32,7 @@ public class SharedPref {
   //  public static final String KEY_ID = "id";
     private static final String USER_UID = "userUid";
     private static final String DATA_SYNC = "sync";
-
+    private static final String FIRST_TIME ="first";
     // Constructor
     public SharedPref(Context context){
         this._context = context;
@@ -55,6 +55,15 @@ public class SharedPref {
     }
     public void setSyncStatuc(long time){
         editor.putLong(DATA_SYNC,time);
+        editor.commit();
+    }
+    public boolean getFirst(){
+        return pref.getBoolean(FIRST_TIME,true);
+    }
+
+
+    public void setFirst(boolean first){
+        editor.putBoolean(FIRST_TIME,first);
         editor.commit();
     }
     public void logOut(){

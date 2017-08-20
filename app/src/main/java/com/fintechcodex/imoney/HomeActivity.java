@@ -56,8 +56,11 @@ public class HomeActivity extends AppCompatActivity {
         });
 
 
+        if(new SharedPref(getApplicationContext()).getFirst()){
+            Message.getSMSM(getApplicationContext());
+            new SharedPref(getApplicationContext()).setFirst(false);
+        }
 
-        Message.getSMSM(getApplicationContext());
 
 
         total1 = database.getCreditTotal();
@@ -68,6 +71,30 @@ public class HomeActivity extends AppCompatActivity {
         ((TextView)findViewById(R.id.due)).setText("₹ "+total3);
         total = total1+total2+total3;
 
+        ((TextView)findViewById(R.id.credit)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomeActivity.this,MainActivity.class);
+                intent.putExtra("Type","Credit");
+                startActivity(intent);
+            }
+        });
+        ((TextView)findViewById(R.id.debit)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomeActivity.this,MainActivity.class);
+                intent.putExtra("Type","Debit");
+                startActivity(intent);
+            }
+        });
+        ((TextView)findViewById(R.id.due)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomeActivity.this,MainActivity.class);
+                intent.putExtra("Type","Due");
+                startActivity(intent);
+            }
+        });
 
     }
 
